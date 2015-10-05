@@ -1,0 +1,108 @@
+#include <Arduino.h>
+#include <Ardumoto.h>
+
+
+#define RIGHT -1
+#define LEFT 1
+
+Ardumoto Moto;
+
+class NanoMouseMotors {
+  private:
+    static const int power = 20; //velocidade dos motores
+    //motor1
+    //motor2
+
+  public:
+
+
+    //Configura pinos do motor
+    void attach(byte leftMotor, byte rightMotor)
+    {
+      //Motor esquerto (leftMotor) seta o pino
+      //leftMotor.attach(leftMotor);
+      //Motor direito (rightMotor) seta o pino
+      //rightMotor.attach(rightMotor);
+    }
+
+    //Para o carro
+    void stop()
+    {
+      Moto.brake('A');
+      Moto.brake('B');
+      Moto.brakeAgressive('A');
+      Moto.brakeAgressive('B');
+      
+    }
+    /*
+     *    void stop(int time = 200)
+    {
+      Moto.brake('A');
+      Moto.brake('B');
+      Moto.brakeAgressive('A');
+      Moto.brakeAgressive('B');
+      delay(time);
+    }
+     */
+
+    //Functions:
+    void forward() //Para frente
+    {
+      //seta a velocidade
+      Moto.setSpeed('A', 0 + power);
+      Moto.setSpeed('B', 0 + power);
+    }
+
+    void forwardTime(unsigned int time)
+    {
+      forward();
+      delay(time);
+      stop();
+    }
+
+    void mBegin() {
+      Moto.begin();
+    }
+    /// ATTENTION B IS THE RIGHT MOTOR
+    void speedRight(int velR){
+      Moto.setSpeed('A', velR);
+     // Serial.print("Motor Direito: ");
+     // Serial.println(velR);
+      
+    }
+    void speedLeft(int velL){
+      Moto.setSpeed('B', velL);
+     // Serial.print("Motor Esquerdo: ");
+     // Serial.println(velL);
+    }
+    void turnLittle(){
+      
+    }
+    //void turn (int direction, int time) //girando por tempo
+    void turn (int direction, float degrees)
+    {
+      Moto.setSpeed('A', 0 - power * direction);
+      Moto.setSpeed('B', 0 + power * direction);
+      if (degrees <= 95) {
+        delay(degrees * 4);
+      }
+      if (degrees > 95 && degrees < 200) {
+        delay(degrees * 2.6); // 5 coulb be any number we have to test and see what number will make the correspondent turn another improvement coul be using bussola
+      }
+      if (degrees >= 200 && degrees <= 360){
+      delay(degrees * 2.5);
+      }
+      stop();
+    }
+
+    //make any polygon
+    void polygon (unsigned int time, int sides)
+    {
+      for (int i = 0; i < sides; i++)
+      {
+        forwardTime(time);
+        turn(RIGHT, 360 / sides);
+      }
+    }
+};
+
